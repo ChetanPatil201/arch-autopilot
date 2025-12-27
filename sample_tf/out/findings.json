@@ -1,0 +1,38 @@
+[
+  {
+    "rule_id": "AZ001",
+    "title": "Storage account does not enforce HTTPS-only traffic",
+    "severity": "high",
+    "category": "Security",
+    "resource_type": "azurerm_storage_account",
+    "resource_name": "sa",
+    "file": "/Users/poonambhatjire/Desktop/Chetan/arch_autopilot/sample_tf/main.tf",
+    "evidence": "enable_https_traffic_only is missing or not set to true.",
+    "remediation": "Set enable_https_traffic_only = true on the azurerm_storage_account.",
+    "confidence": 0.95
+  },
+  {
+    "rule_id": "AZ002",
+    "title": "Storage account allows public blob access",
+    "severity": "high",
+    "category": "Security",
+    "resource_type": "azurerm_storage_account",
+    "resource_name": "sa",
+    "file": "/Users/poonambhatjire/Desktop/Chetan/arch_autopilot/sample_tf/main.tf",
+    "evidence": "allow_blob_public_access is missing or not set to false.",
+    "remediation": "Set allow_blob_public_access = false on the azurerm_storage_account.",
+    "confidence": 0.9
+  },
+  {
+    "rule_id": "AZ003",
+    "title": "Key Vault purge protection is not enabled",
+    "severity": "high",
+    "category": "Security",
+    "resource_type": "azurerm_key_vault",
+    "resource_name": "kv",
+    "file": "/Users/poonambhatjire/Desktop/Chetan/arch_autopilot/sample_tf/main.tf",
+    "evidence": "purge_protection_enabled is missing or not set to true.",
+    "remediation": "Set purge_protection_enabled = true on the azurerm_key_vault.",
+    "confidence": 0.9
+  }
+]

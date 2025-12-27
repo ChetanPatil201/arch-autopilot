@@ -1,0 +1,28 @@
+name: Arch Autopilot (Terraform)
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Poetry
+        run: pipx install poetry
+
+      - name: Install deps
+        run: poetry install
+
+      - name: Run scan (no narrative)
+        run: |
+          poetry run arch-autopilot . --pillar Security --fail-on high

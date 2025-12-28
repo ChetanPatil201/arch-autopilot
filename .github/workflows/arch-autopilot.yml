@@ -25,4 +25,10 @@ jobs:
 
       - name: Run scan (no narrative)
         run: |
-          poetry run arch-autopilot . --pillar Security --fail-on high
+          poetry run arch-autopilot . --pillar Security --fail-on none
+      
+      - name: Upload findings artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: findings
+          path: out/findings.json

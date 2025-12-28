@@ -1,4 +1,5 @@
 # Arch Autopilot
+![Arch Autopilot CI](https://github.com/ChetanPatil201/arch-autopilot/actions/workflows/arch-autopilot.yml/badge.svg)
 
 Arch Autopilot is an AI-powered **Infrastructure-as-Code (IaC) reasoning engine** for Microsoft Azure.
 

@@ -186,6 +186,11 @@ Make the right decision obvious — before production.
 
 ---
 
-## License
+## Contact
 
-MIT
+Built by Chetan Patil.
+
+- LinkedIn: https://www.linkedin.com/in/chetan-patil-2492a738/
+- GitHub: https://github.com/ChetanPatil201/arch-autopilot
+
+If you’re working on Azure platform, cloud security, or IaC governance and want to collaborate or pilot this internally, feel free to reach out.

@@ -8,6 +8,7 @@ on:
 jobs:
   scan:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,15 +21,38 @@ jobs:
       - name: Install Poetry
         run: pipx install poetry
 
-      - name: Install deps
+      - name: Install dependencies
         run: poetry install
 
-      - name: Run scan (no narrative)
+      - name: Run scan (report only)
+        continue-on-error: true
         run: |
-          poetry run arch-autopilot . --pillar Security --fail-on none
-      
+          poetry run arch-autopilot . --pillar Security --fail-on none || true
+
+      - name: Write step summary (top findings)
+        continue-on-error: true
+        run: |
+          echo "## Arch Autopilot Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f out/findings.json ]; then
+            echo "**Findings file:** out/findings.json" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Top findings (first 10)" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+
+            poetry run python -c 'import json; from pathlib import Path; p = Path("out/findings.json"); data = json.loads(p.read_text(encoding="utf-8")) if p.exists() else []; print(f"Total findings: {len(data)}\n"); [print(f"{i}. **[{f.get(\"severity\", \"?\")}] {f.get(\"rule_id\", \"?\")}** — {f.get(\"title\", \"\")} ({f.get(\"resource_type\",\"\")}.{f.get(\"resource_name\",\"\")})") for i, f in enumerate(data[:10], 1)] if data else print("✅ No findings detected!")' >> $GITHUB_STEP_SUMMARY 2>&1 || echo "Error generating summary" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ No findings.json produced. This might mean:" >> $GITHUB_STEP_SUMMARY
+            echo "- No Terraform files were found" >> $GITHUB_STEP_SUMMARY
+            echo "- The scan encountered an error" >> $GITHUB_STEP_SUMMARY
+            echo "- No findings matched the selected pillar" >> $GITHUB_STEP_SUMMARY
+          fi
+
       - name: Upload findings artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: findings
           path: out/findings.json
+          if-no-files-found: ignore
